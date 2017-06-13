@@ -29,5 +29,17 @@ Verify git is installed:
 
 You should see something like `git version 1.8.3.1`.
 
+## Creating an SSH key pair
+
+Git repos are accessed via SSH protocol.
+You first have to generate an SSH key pair (public and private key)
+to be able to use a remote git repo.
+
+Follow the instructions
+[here](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/)
+to generate the key pair.
+The instructions are specifically for GitHub,
+but the generation of the keys is generic.
+
 ## Accessing git repo
 

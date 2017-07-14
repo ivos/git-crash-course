@@ -12,8 +12,8 @@ The chapters are ordered by increasing complexity and responsibility of the role
 
 1. [Concepts](#concepts)
 2. [Installation](#installation)
-3. [Accessing](#accessing)
-4. [Browsing](#browsing)
+3. [Accessing Git repo](#accessing-git-repo)
+4. [Browsing Git repo](#browsing-git-repo)
 5. Contributing to Git repo
 6. Managing Git repo
 7. Creating Git repo
@@ -115,12 +115,12 @@ as the `master` branch points to on the `origin` remote.
 Similarly, `origin/feature/edit-customer` tells you
 where is the `feature/edit-customer` branch on the remote named `origin`.
 
-You cannot (???) manipulate remote branches.
+You cannot manipulate remote branches.
 You can however setup a local branch to **track** a corresponding remote branch,
 so that e.g. when `origin/develop` branch moves ahead by three new commits
 you can easily advance your local `develop` branch in the same way.
 
-> **Remote branch**: virtual (???) branch showing the position of the branch on the remote.
+> **Remote branch**: virtual branch showing the position of the branch on the remote.
 
 ### 1.5 Tag
 
@@ -163,7 +163,6 @@ Verify Git is installed:
 
 You should see something like `git version 1.8.3.1`.
 
-
 ### 2.2 Create an SSH key pair
 
 Git repos are often accessed via SSH protocol.
@@ -175,5 +174,71 @@ to generate the key pair.
 The instructions are specifically for GitHub, but the generation of the keys is generic.
 
 
-## 3. Accessing
+## 3. Accessing Git repo
 
+A Git repo will be published on a **URL**.
+It might provide a single URL (usually in SSH-form) or it might provide multiple URLs (usually HTTP and SSH).
+The URL you choose will limit the operations you will be later able to perform with the repo.
+Always **prefer SSH-form URL** over HTTP, as SSH usually allows read/write access,
+while HTTP usually allows just a read-only access.
+
+An SSH-form URL looks like `git@github.com:ivos/git-crash-course.git`,
+while an HTTP-form URL looks like `https://github.com/ivos/git-crash-course.git`.
+
+To use the SSH-form URL, you first have to **install your public key** on the server providing the Git repo.
+Public Git services usually have a how-to guide
+([Github how-to guide](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/)).
+For in-house repos ask your server admin to add your public key to the Git server.
+
+Once you have the URL of the repo (and the SSH key installed for SSH-form URL)
+go to a directory where you keep your Git repos (create a new one if you don't have it yet),
+**clone** the repo.
+Clone will create a new subdirectory named by the repo itself.
+You can then `cd` into it:
+
+    cd my/repos/dir
+    git clone https://github.com/ivos/git-crash-course.git
+    cd git-crash-course
+
+
+## 4. Browsing Git repo
+
+Show current branch
+
+    git status
+
+If the current branch is tracking a remote branch, their relative position is also listed.
+
+List all branches
+
+    git branch -a
+
+Create a new local branch tracking a given remote branch (`origin/my-branch`)
+
+    git branch my-branch origin/my-branch
+
+List local branches
+
+    git branch
+
+Current branch is marked by asterisk.
+
+List all branches showing all details (including branch tracking)
+
+    git branch -a -vv
+
+Switch to another local branch
+
+    git checkout my-branch
+
+List tags
+
+    git tag
+
+Switch to a tag
+
+    git checkout my-tag
+
+Review history of commits
+
+    git log

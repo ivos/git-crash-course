@@ -10,10 +10,10 @@ This history kept by the VCS is called a repository (repo for short).
 The course is organized by roles in which people might be using Git.
 The chapters are ordered by increasing complexity and responsibility of the role in the Git workflow.
 
-1. [Concepts](#concepts)
-2. [Installation](#installation)
-3. [Accessing Git repo](#accessing-git-repo)
-4. [Browsing Git repo](#browsing-git-repo)
+1. [Concepts](#1-concepts)
+2. [Installation](#2-installation)
+3. [Accessing Git repo](#3-accessing-git-repo)
+4. [Browsing Git repo](#4-browsing-git-repo)
 5. Contributing to Git repo
 6. Managing Git repo
 7. Creating Git repo
@@ -191,9 +191,9 @@ Public Git services usually have a how-to guide
 For in-house repos ask your server admin to add your public key to the Git server.
 
 Once you have the URL of the repo (and the SSH key installed for SSH-form URL)
-go to a directory where you keep your Git repos (create a new one if you don't have it yet),
-**clone** the repo.
-Clone will create a new subdirectory named by the repo itself.
+go to a directory where you keep your Git repos (create a new one if you don't have it yet)
+and **clone** the repo.
+Cloning will create a new subdirectory named by the repo itself.
 You can then `cd` into it:
 
     cd my/repos/dir

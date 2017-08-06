@@ -203,6 +203,8 @@ You can then `cd` into it:
 
 ## 4. Browsing Git repo
 
+### 4.1 Working with branches
+
 Show current branch
 
     git status
@@ -231,6 +233,8 @@ Switch to another local branch
 
     git checkout my-branch
 
+### 4.2 Working with tags
+
 List tags
 
     git tag
@@ -239,6 +243,30 @@ Switch to a tag
 
     git checkout my-tag
 
-Review history of commits
+### 4.3 Inspecting commit history
 
-    git log
+Show commit history in a graphical tool
+
+    gitk
+
+> Customize `gitk` to show all branches:
+> create a new view (View -> New view), name it `All branches`,
+> check `Remember this view`,
+> check `All refs`, `All branches`, `All tags`, `All remote tracking branches`
+> and apply the new view.
+
+You can also use an IDE (Eclipse, IDEA, etc.) to show graphical commit log.
+
+Alternatively, you can use the following commands to review the log in shell.
+
+Quick overview of last commits
+
+    git log --graph --oneline
+
+Detailed review history of commits
+
+    git log --graph
+
+Show what I have done today
+
+    git log --since=00:00:00 --all --no-merges --oneline --reverse --author=ivo.maixner@gmail.com

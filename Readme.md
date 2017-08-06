@@ -83,9 +83,20 @@ You can then maintain all the copies of the repo synchronized using Git remotes.
 A **remote** is defined within a copy of the repo
 and represents a named connection to another copy of the same repo.
 The connection is defined by a URL, the protocol can be SSH, HTTP or file.
-The usual read/write connection uses the SSH protocol,
-read/only connections are usually defined with HTTP protocol.
-You can use file protocol e.g. to keep a backup copy of the repo on a flash disk.
+
+While the **HTTP**-based connection is the most versatile,
+usually being able to pass through corporate security walls,
+it means you have to authenticate (with a username and password)
+every time you communicate with that remote
+(which might be quite often in your daily routine),
+which renders it a bit impractical for substantial work.
+
+The **SSH**-based connection requires some upfront work to set up the SSH key
+(see _Installation_ and _Accessing Git repo_ below),
+however the operating system or IDE is then usually able to the SHH key in use
+and therefore lets you communicate with the remote without any hassle.
+
+You can use also the **file** protocol e.g. to keep a backup copy of the repo on a flash disk.
 
 So Alice and Bob can each have their own copy of the repo.
 Alice can define a remote pointing to Bob’s copy and vice versa,
@@ -101,7 +112,7 @@ which would perform as a sort of a “main” repo into which all the changes ne
 Such a central, **server-based repo** is usually named `origin`.
 
 You can however have multiple remotes and name each one of them as you please,
-e.g. you can put a primary remote on Github (and name it `github`)
+e.g. you can put a primary remote on GitHub (and name it `github`)
 and a secondary remote on Bitbucket (and name it `bitbucket`).
 
 > **Remote**: named connection to another copy of the repo.
@@ -196,16 +207,17 @@ The instructions are specifically for GitHub, but the generation of the keys is 
 
 A Git repo will be published on a **URL**.
 It might provide a single URL (usually in SSH-form) or it might provide multiple URLs (usually HTTP and SSH).
-The URL you choose will limit the operations you will be later able to perform with the repo.
-Always **prefer SSH-form URL** over HTTP, as SSH usually allows read/write access,
-while HTTP usually allows just a read-only access.
+For any serious work always **prefer SSH-form URL** over HTTP,
+as SSH usually allows for hassle-free communication with the remote,
+while HTTP usually requires repeated authentication
+(at least on the console, an IDE may support caching the credentials).
 
 An SSH-form URL looks like `git@github.com:ivos/git-crash-course.git`,
 while an HTTP-form URL looks like `https://github.com/ivos/git-crash-course.git`.
 
 To use the SSH-form URL, you first have to **install your public key** on the server providing the Git repo.
 Public Git services usually have a how-to guide
-([Github how-to guide](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/)).
+([GitHub how-to guide](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/)).
 For in-house repos ask your server admin to add your public key to the Git server.
 
 Once you have the URL of the repo (and the SSH key installed for SSH-form URL)
@@ -368,7 +380,7 @@ When `git status` tells you that the local and remote branches _have diverged_, 
     # Your branch and 'origin/feature/edit-customer' have diverged,
     # and have 1 and 1 different commit each, respectively.
 
-it means that someone else have moved the remote branch on a commit
+it means that someone else have moved the remote branch onto a commit
 that is not based on the last commit your local branch points to.
 This usually never happens with main branches like `master` and `develop`,
 but it may frequently happen with feature branches.

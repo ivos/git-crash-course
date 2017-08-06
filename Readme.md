@@ -14,7 +14,7 @@ The chapters are ordered by increasing complexity and responsibility of the role
 2. [Installation](#2-installation)
 3. [Accessing Git repo](#3-accessing-git-repo)
 4. [Browsing Git repo](#4-browsing-git-repo)
-5. Contributing to Git repo
+5. [Contributing to Git repo](#5-contributing-to-git-repo)
 6. Managing Git repo
 7. Creating Git repo
 
@@ -163,7 +163,25 @@ Verify Git is installed:
 
 You should see something like `git version 1.8.3.1`.
 
-### 2.2 Create an SSH key pair
+### 2.2 Getting help
+
+#### 2.2.1 System man pages
+
+Each Git command has its manual page explaining its syntax and all the options.
+The man page name consists of `git-` prefix followed by the Git command.
+
+So e.g. to invoke man page for the `git status` command
+
+    man git-status
+
+#### 2.2.2 Web resources
+
+* Git home page: [https://git-scm.com/](https://git-scm.com/)
+* Git reference manual (same as man pages): [https://git-scm.com/docs](https://git-scm.com/docs)
+* Pro Git: [https://git-scm.com/book/en/v2](https://git-scm.com/book/en/v2)
+* List of Git resources: [https://git-scm.com/documentation/external-links](https://git-scm.com/documentation/external-links)
+
+### 2.3 Create an SSH key pair
 
 Git repos are often accessed via SSH protocol.
 You first have to generate an SSH key pair (public and private key) to be able to use such a remote Git repo.
@@ -203,6 +221,15 @@ You can then `cd` into it:
 
 ## 4. Browsing Git repo
 
+Find out which branch you are interested in.
+If you want to see the current development status it will usually be `develop`.
+If you want a particular release version, look for the corresponding tag.
+If you have no idea, look around the repo (see _Inspecting commit history_ below)
+and then choose the branch you want to see.
+
+Then make sure you have a local branch tracking the corresponding remote branch
+and switch to it (see _Working with branches_ below).
+
 ### 4.1 Working with branches
 
 Show current branch
@@ -233,6 +260,11 @@ Switch to another local branch
 
     git checkout my-branch
 
+If the local branch you want to checkout does not exist
+it will be created automatically from `origin/my-branch`
+(tracking it) and then you will be switched to this newly created local branch.
+So the `checkout` command can be used as a shortcut for the two actions.
+
 ### 4.2 Working with tags
 
 List tags
@@ -242,6 +274,9 @@ List tags
 Switch to a tag
 
     git checkout my-tag
+
+After you are finished inspecting the tag
+remember to switch back to a proper branch (e.g. `develop`).
 
 ### 4.3 Inspecting commit history
 
@@ -270,3 +305,84 @@ Detailed review history of commits
 Show what I have done today
 
     git log --since=00:00:00 --all --no-merges --oneline --reverse --author=ivo.maixner@gmail.com
+
+### 4.2 Refreshing local repo
+
+When you are interested in a particular branch (let's assume it is `develop`)
+and this branch advances while you are reviewing it,
+you can refresh the local repo by fetching new changes from the remote repo
+and moving you local branch ahead in line with the movement of the corresponding remote branch.
+
+#### 4.2.1 Fetching new changes from remote repo
+
+Fetch new changes from remote repos
+
+    git fetch --prune
+
+The `--prune` option will remove any unused local branches
+that have been deleted remotely in the meantime.
+
+The `fetch` command will bring all new commits from the remote repo into the local one
+and advance all remote branches to match those in the remote repo.
+The local branches will remain untouched, however.
+So now you have to advance you local `develop`
+to match the corresponding remote branch `origin/develop`.
+
+#### 4.2.2 Fast-forwarding local branches
+
+Standing in the local `develop`, issue the `status` command
+
+    git status
+
+You should see
+
+    # On branch develop
+    # Your branch is behind 'origin/develop' by 1 commit, and can be fast-forwarded.
+    #   (use "git pull" to update your local branch)
+    #
+    nothing to commit, working directory clean
+
+Make sure Git tells you that the local branch _can be fast-forwarded_ to the remote branch.
+That means the remote branch has some new commits on top of your local branch
+and you can simply advance the local branch by merging in the remote branch.
+
+Merge the remote `origin/develop` into the local `develop`
+
+    git merge origin/develop
+
+You will see something like
+
+    Updating 84b36a0..6036730
+    Fast-forward
+     1 file changed, 1 insertion(+)
+
+Now your local `develop` has been advanced to the very same commit as the remote `origin/develop`,
+which effectively means that the files in the local repo directory were updated
+with changes from the remote repo.
+
+#### 4.2.3 Hard-resetting local branches
+
+When `git status` tells you that the local and remote branches _have diverged_, like
+
+    # On branch feature/edit-customer
+    # Your branch and 'origin/feature/edit-customer' have diverged,
+    # and have 1 and 1 different commit each, respectively.
+
+it means that someone else have moved the remote branch on a commit
+that is not based on the last commit your local branch points to.
+This usually never happens with main branches like `master` and `develop`,
+but it may frequently happen with feature branches.
+
+In such a case _never_ simply merge the remote branch as above.
+You have to hard-reset the local branch to the commit of the remote branch
+
+    git reset --hard origin/feature/edit-customer
+
+
+## 5. Contributing to Git repo
+
+Find out the branch to which you are supposed to contribute to.
+It will usually be `develop` (or `master`).
+Let's assume it is `develop`.
+
+Make sure you have a local branch tracking the remote `develop` (see above).

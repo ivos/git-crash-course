@@ -93,7 +93,7 @@ which renders it a bit impractical for substantial work.
 
 The **SSH**-based connection requires some upfront work to set up the SSH key
 (see _Installation_ and _Accessing Git repo_ below),
-however the operating system or IDE is then usually able to the SHH key in use
+however the operating system or IDE is then usually able to keep the SSH key in use
 and therefore lets you communicate with the remote without any hassle.
 
 You can use also the **file** protocol e.g. to keep a backup copy of the repo on a flash disk.

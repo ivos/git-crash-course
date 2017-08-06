@@ -2,11 +2,6 @@
 
 This is a practical, no-BS crash course of Git, the most-used version control system.
 
-A version control system (VCS) manages a tree of files within a directory, versioning all changes to them,
-so that the complete history is available:
-once a version of a file is committed to a VCS it will never be lost and you can always get back to it.
-This history kept by the VCS is called a repository (repo for short).
-
 The course is organized by roles in which people might be using Git.
 The chapters are ordered by increasing complexity and responsibility of the role in the Git workflow.
 
@@ -30,7 +25,7 @@ This history kept by the VCS is called a **repository** (repo for short).
 A Git repo starts with an initial commit.
 The first commit adds some files to empty repo and marks the first version of the repo.
 Every subsequent **commit** is then based on one or more previous commits
-and contains the specification of changes to be made to the files
+and contains the specification of changes to be made to all the files
 to get from the previous version of the repo to the new one.
 Each of these changes can be one of:
 - addition of a new file,
@@ -69,7 +64,7 @@ There is usually a `develop` branch pointing to the current development version.
 
 Branch names can be **namespaced** using a slash `/` separator.
 You can e.g. namespace all the branches containing work-in-progress
-that is not yet integrated into develop with `feature`,
+that is not yet integrated into `develop` with "feature",
 so `feature/edit-customer` branch may be used to implement new functionality to edit a customer.
 Notice also that branch names are in kebab case, i.e. all lowercase with  words separated by dashes.
 
@@ -174,25 +169,7 @@ Verify Git is installed:
 
 You should see something like `git version 1.8.3.1`.
 
-### 2.2 Getting help
-
-#### 2.2.1 System man pages
-
-Each Git command has its manual page explaining its syntax and all the options.
-The man page name consists of `git-` prefix followed by the Git command.
-
-So e.g. to invoke man page for the `git status` command
-
-    man git-status
-
-#### 2.2.2 Web resources
-
-* Git home page: [https://git-scm.com/](https://git-scm.com/)
-* Git reference manual (same as man pages): [https://git-scm.com/docs](https://git-scm.com/docs)
-* Pro Git: [https://git-scm.com/book/en/v2](https://git-scm.com/book/en/v2)
-* List of Git resources: [https://git-scm.com/documentation/external-links](https://git-scm.com/documentation/external-links)
-
-### 2.3 Create an SSH key pair
+### 2.2 Create an SSH key pair
 
 Git repos are often accessed via SSH protocol.
 You first have to generate an SSH key pair (public and private key) to be able to use such a remote Git repo.
@@ -201,6 +178,26 @@ Follow
 [the instructions here](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/)
 to generate the key pair.
 The instructions are specifically for GitHub, but the generation of the keys is generic.
+
+### 2.3 Getting help
+
+#### 2.3.1 System man pages
+
+Each Git command has its manual page explaining its syntax and all the options.
+The man page name consists of `git-` prefix followed by the Git command.
+
+So e.g. to invoke man page for the `git status` command
+
+    man git-status
+
+#### 2.3.2 Web resources
+
+* Git home page: [https://git-scm.com/](https://git-scm.com/)
+* Git reference manual (same as man pages): [https://git-scm.com/docs](https://git-scm.com/docs)
+* Pro Git (a rather advanced book on Git):
+    [https://git-scm.com/book/en/v2](https://git-scm.com/book/en/v2)
+* List of other Git resources:
+    [https://git-scm.com/documentation/external-links](https://git-scm.com/documentation/external-links)
 
 
 ## 3. Accessing Git repo
@@ -314,9 +311,14 @@ Detailed review history of commits
 
     git log --graph
 
-Show what I have done today
+The Git `log` command is actually quite versatile (see its man page).
+It allows for cool things like listing what I have done today
 
     git log --since=00:00:00 --all --no-merges --oneline --reverse --author=ivo.maixner@gmail.com
+
+Or listing the most active repo users within the last 3 weeks
+
+    git shortlog -sn --since='3 weeks'
 
 ### 4.2 Refreshing local repo
 

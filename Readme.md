@@ -169,7 +169,19 @@ Verify Git is installed:
 
 You should see something like `git version 1.8.3.1`.
 
-### 2.2 Create an SSH key pair
+### 2.2 Global Git setup
+
+Set up your identity.
+This will be used by Git to identify the author of your future commits.
+
+    git config --global user.name "My Name"
+    git config --global user.email my.email@example.com
+
+Verify your global setup
+
+    git config --global -l
+
+### 2.3 Create an SSH key pair
 
 Git repos are often accessed via SSH protocol.
 You first have to generate an SSH key pair (public and private key) to be able to use such a remote Git repo.
@@ -179,9 +191,9 @@ Follow
 to generate the key pair.
 The instructions are specifically for GitHub, but the generation of the keys is generic.
 
-### 2.3 Getting help
+### 2.4 Getting help
 
-#### 2.3.1 System man pages
+#### 2.4.1 System man pages
 
 Each Git command has its manual page explaining its syntax and all the options.
 The man page name consists of `git-` prefix followed by the Git command.
@@ -190,7 +202,7 @@ So e.g. to invoke man page for the `git status` command
 
     man git-status
 
-#### 2.3.2 Web resources
+#### 2.4.2 Web resources
 
 * Git home page: [https://git-scm.com/](https://git-scm.com/)
 * Git reference manual (same as man pages): [https://git-scm.com/docs](https://git-scm.com/docs)
@@ -320,11 +332,11 @@ Or listing the most active repo users within the last 3 weeks
 
     git shortlog -sn --since='3 weeks'
 
-### 4.2 Refreshing local repo
+### 4.2 Updating local repo
 
 When you are interested in a particular branch (let's assume it is `develop`)
 and this branch advances while you are reviewing it,
-you can refresh the local repo by fetching new changes from the remote repo
+you can update the local repo by fetching new changes from the remote repo
 and moving you local branch ahead in line with the movement of the corresponding remote branch.
 
 #### 4.2.1 Fetching new changes from remote repo
@@ -392,11 +404,80 @@ You have to hard-reset the local branch to the commit of the remote branch
 
     git reset --hard origin/feature/edit-customer
 
+Be sure you have **no uncommitted changes** in the files though,
+as they would be lost after the hard-reset.
 
 ## 5. Contributing to Git repo
 
-Find out the branch to which you are supposed to contribute to.
+Find out **the branch** to which you are supposed to contribute to.
 It will usually be `develop` (or `master`).
 Let's assume it is `develop`.
 
-Make sure you have a local branch tracking the remote `develop` (see above).
+### 5.1 Fork out a new feature branch
+
+First make sure you are **on the local branch** `develop` (tracking the remote one)
+and that it is **up-to-date** (see above),
+this might save you some work with merging later.
+
+Create a new feature branch
+(let's assume you want to add new functionality to update a customer)
+and switch to it
+
+    git branch feature/update-customer
+    git checkout feature/update-customer
+
+### 5.2 Commit your changes
+    
+After you have made your changes to the local files you want to commit them.
+Always **review** all your changes before you commit them.
+Then you **stage** (a subset of) your changes to be committed.
+Staging a change marks it to be committed by the next commit you perform.
+**Staging area** (also called **index**) is a temporary buffer
+that holds all the changes to be committed in the next commit.
+Once you have staged all the changes you want to commit,
+you perform the actual **commit**.
+Any changes not staged will still remain outstanding in the local files
+and you commit them in a separate commit (or revert them).
+
+The easiest way to make a commit is to use an IDE (Eclipse, IDEA)
+which let's you review the changes in a comprehensible way
+and commit them.
+
+Another option is `git gui`, a graphical tool provided by Git itself.
+It lets you review the changes to be committed,
+stage a subset of them and commit it (and also perform many more tasks).
+Git GUI let's you even stage a subset of changes within an individual file,
+which is a rather unique and sometimes quite handy feature.
+
+You can also commit on the command line.
+
+Show the overview of changed files
+
+    git status
+
+At this point Git says there are _changes not staged for commit_ (for modified and deleted files)
+or _untracked files_ (for newly created files).
+
+Show the details of changes within the files (modified lines)
+
+    git diff
+
+Stage a file named `test.txt` for commit
+
+    git add -all test.txt
+
+Show the overview of changes to be committed
+
+    git status
+
+Un-stage a file (the changes to the file will remain, they will just not be committed now)
+
+    git reset HEAD test.txt
+
+Once you have staged all the changes you want to commit now,
+make the commit, passing in the commit message
+
+    git commit -m "Add update customer."
+
+### 5.3 Writing commit messages
+

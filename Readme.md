@@ -315,13 +315,17 @@ You can also use an IDE (Eclipse, IDEA, etc.) to show graphical commit log.
 
 Alternatively, you can use the following commands to review the log in shell.
 
-Quick overview of last commits
+Quick overview of last commits on all branches
+
+    git log --all --graph --oneline
+
+Quick overview of last commits on the current branch
 
     git log --graph --oneline
 
 Detailed review history of commits
 
-    git log --graph
+    git log --all --graph
 
 The Git `log` command is actually quite versatile (see its man page).
 It allows for cool things like listing what I have done today
@@ -480,4 +484,170 @@ make the commit, passing in the commit message
     git commit -m "Add update customer."
 
 ### 5.3 Writing commit messages
+
+Find out what the rules are for the Git repo you are contributing to,
+either explicitly or implicitly by looking at messages of other commits.
+
+If you are not sure, consider using the following:
+
+- Write a whole sentence (first letter upper-case, end with a dot)
+  starting with a verb in infinitive.
+- Use a verb describing the nature of the change,
+  like _Add_, _Modify_, _Remove_, _Refactor_, etc.
+- Be specific.
+  Avoid general statements like "_Modify customer functionality._"
+  and use e.g. "_Add validate customer name length._" instead.
+- Do not go overboard.
+  Remember the purpose of the commit message.
+  It is not intended to detail every bit changed within the commit,
+  it should rather summarize the meaning and purpose of the commit.
+- Limit the length of the sentence.
+  If there is more to say, make an empty row
+  and continue with paragraphs below it.
+- If the commit resolves an issue from an issue tracking system,
+  include its number at the beginning of the message,
+  usually preceded with a hash tag.
+
+### 5.4 What and when to commit
+
+Keep Git **history clean**.
+Make each commit a meaningful unit.
+A commit should have a **single purpose** and should resolve this purpose **completely**.
+
+- Isolate non-related changes into different commits.
+- Include the change as a whole into the commit.
+  When you modify system's functionality also change the tests within that commit.
+- Each commit should take the repo content from one consistent state to another.
+  Tests should be passing after each commit.
+
+**Backup** you work.
+Make (and push, see below) at least one commit each day
+to prevent loosing your whole day-worth work
+and also to publish to other team members what you have done.
+
+This may conflict with the completeness rule above.
+In such a case, 
+make the commit on a feature branch,
+mark it explicitly as _WIP_ (work-in-progress)
+and _amend_ it (see below) the next day into a new commit that is complete.
+
+Given the general rules above,
+you should always consider if the effort to fulfill them
+is worth the benefit of having a clean Git history.
+
+### 5.5 Preparing a merge request
+
+Once you have made all the commits,
+you want to merge your feature branch into `develop`.
+Before you issue a request for your branch to be merged,
+you should make sure it is based onto current state of `develop`.
+
+Imagine you have forked your feature branch and made your commits `A`, `B` and `C`
+
+    K--L  develop
+        \
+         A--B--C  feature/update-customer
+
+In the meantime however, someone else have advanced `develop` with other new commits `M`, `N`
+
+    K--L--M--N  develop
+        \
+         A--B--C  feature/update-customer
+
+Now you need to **rebase** your commits on top of current `develop`.
+This means that instead of your original commits `A`, `B`, `C` based on commit `L`
+you need to have new commits, let's call them `A1`, `B1`, `C1`,
+that will be based on commit `N`.
+
+    K--L--M--N  develop
+       |      \
+       |       A1--B1--C1  feature/update-customer
+        \
+         A--B--C
+
+The original commits `A`, `B`, `C` will remain in your local repo after the rebase,
+but as no branch will be pointing to them, they will not be visible.
+
+The contents of the new commits `A1`, `B1`, `C1` will be similar to that of the original ones,
+but depending on what has been changed in commits `M`, `N` may not be exactly the same.
+
+IDEA has a comprehensive and usable functionality to do the rebase
+easily in a graphical environment.
+
+To rebase on the command line, follow along.
+
+Make sure you have no uncommitted changes
+
+    git status
+
+Fetch new changes from the remote
+and fast-forward local `develop` (assuming advancing `develop` is always fast-forward)
+
+    git fetch --prune
+    git checkout develop
+    git merge origin/develop
+
+Return back to the feature branch
+
+    git checkout feature/update-customer
+
+Initiate the rebase
+
+    git rebase develop
+
+Git tries to create the `A1`, `B1`, `C1` commits automatically for you.
+Many times it succeeds and the rebase completes immediately.
+When there are conflicting changes that Git cannot resolve by itself however,
+Git will announce the failure and asks you to resolve them manually.
+If you see something like
+
+    ...
+    CONFLICT (content): Merge conflict in test.txt
+    Failed to merge in the changes.
+    ...
+
+you know the automatic rebase failed and you have to resolve the conflicts yourself.
+
+To get overview of rebase progress
+
+    git status
+
+You will see an "_Unmerged paths:_" section listing the files with conflicts.
+
+Resolve all files one by one by editing them in your editor.
+Each one contains sections highlighting the conflicts like this
+
+    ...some previous lines...
+    <<<<<<< HEAD
+    Here go the lines from the develop branch...
+    =======
+    Here go the lines from your branch...
+    >>>>>>> Add update customer.
+    ...some following lines...
+
+Edit each such conflict section, remove the marker lines
+and merge the lines from both branches
+so that the resulting contents of the file is what you want to be there after the rebase.
+
+    ...some previous lines...
+    Here are the lines from the develop branch with my changes merged in.
+    ...some following lines...
+
+Then add each manually merged file to the staging area
+
+    git add --all test.txt
+
+After you have merged and staged all conflicting files, show the overview again
+
+    git status
+
+You should see "_all conflicts fixed_" message displayed.
+Now you can continue with the rebase
+
+    git rebase --continue
+
+Depending on the nature of conflicts
+and the particular commits made on your feature branch and on `develop`
+you may have to resolve conflicts repeatedly.
+This is ok, it's just the way it works.
 

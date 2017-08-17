@@ -336,14 +336,14 @@ Or listing the most active repo users within the last 3 weeks
 
     git shortlog -sn --since='3 weeks'
 
-### 4.2 Updating local repo
+### 4.4 Updating local repo
 
 When you are interested in a particular branch (let's assume it is `develop`)
 and this branch advances while you are reviewing it,
 you can update the local repo by fetching new changes from the remote repo
-and moving you local branch ahead in line with the movement of the corresponding remote branch.
+and moving your local branch ahead in line with the corresponding remote branch.
 
-#### 4.2.1 Fetching new changes from remote repo
+#### 4.4.1 Fetching new changes from remote repo
 
 Fetch new changes from remote repos
 
@@ -355,10 +355,10 @@ that have been deleted remotely in the meantime.
 The `fetch` command will bring all new commits from the remote repo into the local one
 and advance all remote branches to match those in the remote repo.
 The local branches will remain untouched, however.
-So now you have to advance you local `develop`
+So now you have to advance your local `develop`
 to match the corresponding remote branch `origin/develop`.
 
-#### 4.2.2 Fast-forwarding local branches
+#### 4.4.2 Fast-forwarding local branches
 
 Standing in the local `develop`, issue the `status` command
 
@@ -372,7 +372,7 @@ You should see
     #
     nothing to commit, working directory clean
 
-Make sure Git tells you that the local branch _can be fast-forwarded_ to the remote branch.
+Make sure Git tells you that the local branch "_can be fast-forwarded_" to the remote branch.
 That means the remote branch has some new commits on top of your local branch
 and you can simply advance the local branch by merging in the remote branch.
 
@@ -390,9 +390,9 @@ Now your local `develop` has been advanced to the very same commit as the remote
 which effectively means that the files in the local repo directory were updated
 with changes from the remote repo.
 
-#### 4.2.3 Hard-resetting local branches
+#### 4.4.3 Hard-resetting local branches
 
-When `git status` tells you that the local and remote branches _have diverged_, like
+When `git status` tells you that the local and remote branches "_have diverged_", like
 
     # On branch feature/edit-customer
     # Your branch and 'origin/feature/edit-customer' have diverged,
@@ -409,7 +409,7 @@ You have to hard-reset the local branch to the commit of the remote branch
     git reset --hard origin/feature/edit-customer
 
 Be sure you have **no uncommitted changes** in the files though,
-as they would be lost after the hard-reset.
+as they might be lost after the hard-reset.
 
 ## 5. Contributing to Git repo
 
@@ -467,8 +467,8 @@ Show the overview of changed files
 
     git status
 
-At this point Git says there are _changes not staged for commit_ (for modified and deleted files)
-or _untracked files_ (for newly created files).
+At this point Git says there are "_changes not staged for commit_" (for modified and deleted files)
+or "_untracked files_" (for newly created files).
 
 Show the details of changes within the files (modified lines)
 

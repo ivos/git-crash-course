@@ -430,8 +430,16 @@ and switch to it
     git branch feature/update-customer
     git checkout feature/update-customer
 
+**Push** the branch to `origin` and setup tracking
+
+    git push -u origin feature/update-customer
+
+This makes the local branch track the remote branch
+so that from now on you can do just `git push` to push the local branch to the remote repo
+and Git will know to which remote branch you are pushing.
+
 ### 5.2 Commit your changes
-    
+
 After you have made your changes to the local files you want to commit them.
 Always **review** all your changes before you commit them.
 Then you **stage** (a subset of) your changes to be committed.
@@ -483,6 +491,15 @@ make the commit, passing in the commit message
 
     git commit -m "Add update customer."
 
+You have created a new commit locally.
+Now you need to **push** the commit to the remote repo
+to backup your work and share it with other team members.
+
+Provided you have setup the local branch as tracking its remote branch
+(see above)
+
+    git push
+
 ### 5.3 Writing commit messages
 
 Find out what the rules are for the Git repo you are contributing to,
@@ -521,8 +538,8 @@ A commit should have a **single purpose** and should resolve this purpose **comp
   Tests should be passing after each commit.
 
 **Backup** you work.
-Make (and push, see below) at least one commit each day
-to prevent loosing your whole day-worth work
+Make (and push) at least one commit each day
+to prevent losing your whole day-worth work
 and also to publish to other team members what you have done.
 
 This may conflict with the completeness rule above.
@@ -540,7 +557,7 @@ is worth the benefit of having a clean Git history.
 Once you have made all the commits,
 you want to merge your feature branch into `develop`.
 Before you issue a request for your branch to be merged,
-you should make sure it is based onto current state of `develop`.
+you should make sure it is based onto the current state of `develop`.
 
 Imagine you have forked your feature branch and made your commits `A`, `B` and `C`
 
@@ -571,7 +588,7 @@ but as no branch will be pointing to them, they will not be visible.
 The contents of the new commits `A1`, `B1`, `C1` will be similar to that of the original ones,
 but depending on what has been changed in commits `M`, `N` may not be exactly the same.
 
-IDEA has a comprehensive and usable functionality to do the rebase
+A decent IDE (IDEA, Eclipse) has a comprehensive and usable functionality to do the rebase
 easily in a graphical environment.
 
 To rebase on the command line, follow along.
@@ -650,4 +667,10 @@ Depending on the nature of conflicts
 and the particular commits made on your feature branch and on `develop`
 you may have to resolve conflicts repeatedly.
 This is ok, it's just the way it works.
+
+Finally, when the rebase has successfully completed, push your changes upstream
+
+    git push
+
+Now your feature branch is ready to be merged to `develop`.
 

@@ -417,7 +417,7 @@ Find out **the branch** to which you are supposed to contribute to.
 It will usually be `develop` (or `master`).
 Let's assume it is `develop`.
 
-### 5.1 Fork out a new feature branch
+### 5.1 Forking out a new feature branch
 
 First make sure you are **on the local branch** `develop` (tracking the remote one)
 and that it is **up-to-date** (see above),
@@ -438,7 +438,7 @@ This makes the local branch track the remote branch
 so that from now on you can do just `git push` to push the local branch to the remote repo
 and Git will know to which remote branch you are pushing.
 
-### 5.2 Commit your changes
+### 5.2 Committing your changes
 
 After you have made your changes to the local files you want to commit them.
 Always **review** all your changes before you commit them.
@@ -478,7 +478,7 @@ Stage a file named `test.txt` for commit
 
     git add -all test.txt
 
-Show the overview of changes to be committed
+Show the overview of "_changes to be committed_"
 
     git status
 
@@ -673,4 +673,80 @@ Finally, when the rebase has successfully completed, push your changes upstream
     git push
 
 Now your feature branch is ready to be merged to `develop`.
+
+### 5.6 Modifying commits
+
+#### 5.6.1 Amending last commit
+
+After you have made a commit, you might want to modify it.
+Maybe you want to add more changes, fix some issues in the files you have committed,
+finalize a previous work-in-progress commit or just re-phrase the commit message.
+
+Stage all changes you want to be part of the last commit.
+
+Create a new commit by **amending** the last one
+
+    git commit --amend -m "Amended commit message."
+
+You can also use `git gui` and check the "_Amend last commit_" option.
+
+If you have had already pushed the original commit,
+you are now left with commit history like this
+
+    A--B--C  remotes/origin/feature/update-customer
+        \
+         C1  feature/update-customer
+
+`C` is the original commit (before amend)
+and `C1` is the amended commit.
+The local feature branch points to the amended commit `C1`,
+but the remote branch still points to the original `C` commit.
+
+When you now run
+
+    git status
+
+you will see something like
+
+    # On branch feature/update-customer
+    # Your branch and 'origin/feature/update-customer' have diverged,
+    # and have 1 and 1 different commit each, respectively.
+
+An attempt to push your feature branch
+
+    git push
+
+will now be rejected as "_non-fast-forward_"
+
+     ! [rejected]   feature/update-customer -> feature/update-customer (non-fast-forward)
+    error: failed to push some refs to ...remote repo URL...
+    hint: Updates were rejected because the tip of your current branch is behind
+    hint: its remote counterpart. ...
+
+To push your modified commits, you have to **force** the push.
+
+#### 5.6.2 Force-pushing modified commits
+
+Any non-fast-forward changes in you local feature branch commit history
+are by default rejected on push.
+This is a security feature to prevent modifying commit history in remote repo
+by accident.
+
+A remote repo is usually shared by multiple team members
+and others may have already based their work on the remote commits.
+When you modify them you effectively invalidate all such derived commits
+and force their authors to rebase their work later.
+
+Be sure, therefore, that you really want to change history of a remote branch.
+
+To **force-push** a feature branch with modified commits
+
+    git push --force origin feature/update-customer
+
+Always specify the remote and the branch to be force-pushed explicitly
+to prevent any surprises.
+
+Force-push re-assigns the remote branch to the same commit as the tracking local branch.
+If the original commit is not pointed to by any other branch,
+it becomes invisible.
 

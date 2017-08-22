@@ -744,9 +744,80 @@ To **force-push** a feature branch with modified commits
     git push --force origin feature/update-customer
 
 Always specify the remote and the branch to be force-pushed explicitly
-to prevent any surprises.
+to prevent any mishaps.
 
 Force-push re-assigns the remote branch to the same commit as the tracking local branch.
 If the original commit is not pointed to by any other branch,
 it becomes invisible.
+
+#### 5.6.3 Squashing multiple commits into one
+
+While preparing a merge request you might re-consider your commits.
+The most common case is when you want to **squash** multiple commits into one.
+You can achieve this by doing the rebase of the feature branch on top of `develop` in an **interactive** mode.
+
+You can perform interactive rebase in an IDE (e.g. IDEA).
+
+Alternatively, you can also do it on the command line.
+
+Start as in _Preparing a merge request_ above,
+but initiate the rebase in the interactive mode
+
+    git rebase --interactive develop
+
+A _vi_ editor is opened and the commits in the feature branch are listed
+
+    pick cb3d8b0 Add update customer.
+    pick 4fbddf4 Add validate customer name in update customer.
+    pick 46dffb4 Add validate customer phone in update customer.
+
+Each line presents a commit (with a hash and commit message)
+preceded by a command.
+The command is by default pre-filled as `pick` which means
+_keep the commit as is_.
+
+You can then modify commands before the individual commits
+to specify the actions Git should take.
+One of the commands is `squash` (can be abbreviated as `s`)
+which means _squash the commit to the previous one_.
+
+Let's say you want to squash the last two of the three commits above.
+You modify the last command from `pick` to `s` (= `squash`)
+
+    pick cb3d8b0 Add update customer.
+    pick 4fbddf4 Add validate customer name in update customer.
+    s 46dffb4 Add validate customer phone in update customer.
+
+(Press <kbd>i</kbd> to start editing,
+delete `pick` and type <kbd>s</kbd> instead,
+press <kbd>ESC</kbd> to stop editing
+and type <kbd>ZZ</kbd> to save changes.)
+
+Now you have to prepare the commit message for the new squashed commit.
+
+    # This is a combination of 2 commits.
+    # The first commit's message is:
+    
+    Add validate customer name in update customer.
+    
+    # This is the 2nd commit message:
+    
+    Add validate customer phone in update customer.
+    
+    # Please enter the commit message for your changes. ...
+
+(Scroll to both lines and press <kbd>dd</kbd> to delete each.
+Press <kbd>i</kbd> to start editing,
+type in the new commit message,
+press <kbd>ESC</kbd> to stop editing
+and type <kbd>ZZ</kbd> to save changes.)
+
+    # This is a combination of 2 commits.
+    
+    Add validate customer in update.
+    
+    # Please enter the commit message for your changes. ...
+
+The two commits have now been squashed into one.
+Now you have to force-push the branch (see above) because you have modified the commits.
 

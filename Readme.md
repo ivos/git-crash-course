@@ -827,7 +827,7 @@ TODO
 
 ## 6. Managing Git repo
 
-### 6.1 Linear history, always and everywhere
+### 6.1 Merging for linear history
 
 Keep Git history **linear**, never merge branches when more than one has its own commits.
 

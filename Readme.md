@@ -860,18 +860,21 @@ you have two options how to proceed with the merge.
 
 You can either do a straightforward merge (and delete `branch-2`):
 
+    git merge branch-2
+
+and end up with:
+
     A--B--C--D--K1--L1--M1  branch-1
 
-Or you can do a "_no-fast-forward_" merge
+Or you can do a "_no-fast-forward_" merge:
+
+    git merge --no-ff branch-2
+
 that will keep the original branching visible in the history:
 
     A--B--C--D------------R1  branch-1
               \          /
                K1--L1--M1
-
-Executing a "_no-fast-forward_" merge (after you have rebased `branch-2` on top of `branch-1`):
-
-    git merge --no-ff branch-2
 
 Commit `R1` message now says
 
@@ -894,12 +897,12 @@ and all the commits form a single linear, unambiguous sequence of commits
                        \
                         O--O--O  feature/feature-2
 
-#### Master
+#### Branch `master`
 
 **Disable force-pushing** and **branch delete** on `master`.
 This will make `master` a _stable_ branch,
 once a commit is pushed there it can never be changed again.
-Other team members may then safely base their work on any commit in `master`
+Others may then safely base their work on any commit in `master`
 and never be forced to change it in future due to changes in `master`.
 
 On GitHub, for example, you can set `master` as one of the "_protected_" branches
@@ -908,7 +911,34 @@ in the project's Settings.
 Keep `master` at **the last release** of your project.
 Branch `master` should ideally always point to the current (last) release
 (together with the last Git tag)
-and so always advance when a new release is created.
+and so should always be advanced when a new release is created.
 
-#### Develop
+#### Branch `develop`
 
+Create a `develop` branch to hold the current development status.
+Branch `develop` will therefore contain changes introduced after the last release
+(i.e. unreleased changes).
+
+**Disable force-pushing** and **branch delete** on `develop` as well.
+
+#### Feature branches
+
+Mark feature branches with `feature/` namespace
+so that they are easily distinguishable.
+
+### 6.3 Merging features into `develop`
+
+Before merging a feature branch into `develop`:
+- Always require the feature branch commit history to be linear.
+- Always require the feature branch to be rebased on top of current `develop`,
+  or do the rebase yourself, to keep history of `develop` linear.
+- Merge feature branches using "_no-fast-forward_" mode (see above)
+  to preserve branching information in the Git history.
+
+### 6.4 Releasing
+
+- Perform releases either directly on `develop`
+or on a specific `release/` branch.
+- Create a tag for the release version.
+- If you used a release branch, merge it into `develop`.
+- Advance `master` onto the release tag.

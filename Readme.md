@@ -10,7 +10,7 @@ The chapters are ordered by increasing complexity and responsibility of the role
 3. [Accessing Git repo](#3-accessing-git-repo)
 4. [Browsing Git repo](#4-browsing-git-repo)
 5. [Contributing to Git repo](#5-contributing-to-git-repo)
-6. Managing Git repo
+6. [Managing Git repo](#6-managing-git-repo)
 7. Creating Git repo
 
 ## 1. Concepts
@@ -820,4 +820,95 @@ and type <kbd>ZZ</kbd> to save changes.)
 
 The two commits have now been squashed into one.
 Now you have to force-push the branch (see above) because you have modified the commits.
+
+### 5.7 (Resets)
+
+TODO
+
+## 6. Managing Git repo
+
+### 6.1 Linear history, always and everywhere
+
+Keep Git history **linear**, never merge branches when more than one has its own commits.
+
+    A--B--C--D  branch-1
+        \
+         K--L--M  branch-2
+
+In the above example, never merge branch `branch-2` directly into `branch-1` like this:
+
+    A--B--C--D---R  branch-1    DON'T DO THIS!
+        \       /
+         K--L--M
+
+Commit `R` above merged two branches with parallel commits.
+**DON'T DO THIS.**
+Once you start down this path, you end up in a **merge hell**,
+where branches split and merge in such a complicated pattern
+that no-one will ever know which commit is included in which branch anymore.
+
+Always **rebase** the other branch on top of the current branch before merging it in.
+
+    A--B--C--D  branch-1
+       |     |
+       |     K1--L1--M1  branch-2
+        \
+         K--L--M
+
+Once you rebase `branch-2` on top of `branch-1`,
+you have two options how to proceed with the merge.
+
+You can either do a straightforward merge (and delete `branch-2`):
+
+    A--B--C--D--K1--L1--M1  branch-1
+
+Or you can do a "_no-fast-forward_" merge
+that will keep the original branching visible in the history:
+
+    A--B--C--D------------R1  branch-1
+              \          /
+               K1--L1--M1
+
+Executing a "_no-fast-forward_" merge (after you have rebased `branch-2` on top of `branch-1`):
+
+    git merge --no-ff branch-2
+
+Commit `R1` message now says
+
+    Merge branch 'branch-2' into 'branch-1'
+
+and although it merges 2 branches, the history is still **linear**,
+because there are no commits on `branch-1` in parallel to the 3 commits from `branch-2`
+and all the commits form a single linear, unambiguous sequence of commits
+`A`, `B`, `C`, `D`, `K1`, `L1`, `M1`, `R1`.
+
+### 6.2 Repo layout
+
+    O--O------O  master, v-1.2.3
+        \    / \
+         O--O   O--O--O---------O------O--O  develop
+                      |\       / \    /|   \
+                      | O--O--O   O--O |    O  feature/feature-3
+                      |                 \
+                      |                  O--O--O  feature/feature-1
+                       \
+                        O--O--O  feature/feature-2
+
+#### Master
+
+**Disable force-pushing** and **branch delete** on `master`.
+This will make `master` a _stable_ branch,
+once a commit is pushed there it can never be changed again.
+Other team members may then safely base their work on any commit in `master`
+and never be forced to change it in future due to changes in `master`.
+
+On GitHub, for example, you can set `master` as one of the "_protected_" branches
+in the project's Settings.
+
+Keep `master` at **the last release** of your project.
+Branch `master` should ideally always point to the current (last) release
+(together with the last Git tag)
+and so always advance when a new release is created.
+
+#### Develop
 

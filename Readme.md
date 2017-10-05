@@ -791,7 +791,7 @@ You modify the last command from `pick` to `s` (= `squash`)
 (Press <kbd>i</kbd> to start editing,
 delete `pick` and type <kbd>s</kbd> instead,
 press <kbd>ESC</kbd> to stop editing
-and type <kbd>ZZ</kbd> to save changes.)
+and type <kbd>Z</kbd><kbd>Z</kbd> to save changes.)
 
 Now you have to prepare the commit message for the new squashed commit.
 
@@ -806,11 +806,11 @@ Now you have to prepare the commit message for the new squashed commit.
     
     # Please enter the commit message for your changes. ...
 
-(Scroll to both lines and press <kbd>dd</kbd> to delete each.
+(Scroll to both lines and press <kbd>d</kbd><kbd>d</kbd> to delete each.
 Press <kbd>i</kbd> to start editing,
 type in the new commit message,
 press <kbd>ESC</kbd> to stop editing
-and type <kbd>ZZ</kbd> to save changes.)
+and type <kbd>Z</kbd><kbd>Z</kbd> to save changes.)
 
     # This is a combination of 2 commits.
     

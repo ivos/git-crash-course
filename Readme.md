@@ -11,7 +11,7 @@ The chapters are ordered by increasing complexity and responsibility of the role
 4. [Browsing Git repo](#4-browsing-git-repo)
 5. [Contributing to Git repo](#5-contributing-to-git-repo)
 6. [Managing Git repo](#6-managing-git-repo)
-7. Creating Git repo
+7. [Creating Git repo](#7-creating-git-repo)
 
 ## 1. Concepts
 
@@ -821,9 +821,41 @@ and type <kbd>ZZ</kbd> to save changes.)
 The two commits have now been squashed into one.
 Now you have to force-push the branch (see above) because you have modified the commits.
 
-### 5.7 (Resets)
+### 5.7 Undoing commits
 
-TODO
+Instead of amending the last commit,
+you can also undo it completely.
+
+Find the SHA hash of the previous commit (i.e. the commit before the one you want to undo)
+
+    git log --oneline --graph
+
+Copy the previous commit SHA hash.
+
+Undo the last commit by resetting to the previous commit hash
+(use the hash you have copied)
+
+    git reset --soft e8cceeb
+
+This will **undo** the last commit and **leave** all its changes staged for commit,
+so that you can modify them as needed before committing again.
+
+If you know already you do not want to use the changes from that commit at all,
+you can also do a hard reset
+
+    git reset --hard  e8cceeb
+
+This will **undo** the last commit and **drop** all it changes.
+
+**Note:**
+Use this with care as there is no way to retrieve those changes again
+once you have perform the hard reset!
+
+You can also **undo multiple commits** in this way.
+For example, to undo all commit on the local feature branch all the way down to `develop`
+
+    git reset --soft develop
+
 
 ## 6. Managing Git repo
 
@@ -942,3 +974,55 @@ or on a specific `release/` branch.
 - Create a tag for the release version.
 - If you used a release branch, merge it into `develop`.
 - Advance `master` onto the release tag.
+
+## 7. Creating Git repo
+
+### 7.1 Creating local repo
+
+When you want to start managing files in a given directory with Git,
+initialize a local Git repo within that directory.
+
+Initialize new Git local repo in the current directory
+
+    git init
+
+This creates `.git` sub-directory that contains the Git repo
+for the files under the current directory.
+
+You can then create the first commit.
+
+### 7.2 Creating server-side repo
+
+You can wither use:
+- a public web service for this (like GitHub, Bitbucket),
+- an internal company web service (like GitLab) or
+- a plain server with SSH access.
+
+When you want to create shared Git repo on a plain server with SSH access,
+initialize a server-side repo.
+
+The repo on the server will never have any working files,
+so the Git repo control files are created directly within the repo directory
+(i.e. no `.git` sub-directory is created).
+
+The server-repo directory usually ends with `.git` suffix.
+
+Initialize new Git server-side repo within the specified directory
+
+    git init --bare my-repo.git
+
+### 7.3 Connecting local repo to the server repo
+
+To connect new local repo to a server repo,
+add the URL of the server repo as a new `origin` remote
+(example for a GitHub repo)
+
+    git remote add origin https://github.com/ivos/git-crash-course.git
+
+and push the `master` branch to `origin` (setting up tracking)
+
+    git push -u origin master
+
+The local repo is now connected
+and you can e.g. do a simple `git push` on `master`.
+

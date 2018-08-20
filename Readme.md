@@ -317,15 +317,15 @@ Alternatively, you can use the following commands to review the log in shell.
 
 Quick overview of last commits on all branches
 
-    git log --all --graph --oneline
+    git log --all --graph --oneline --decorate
 
 Quick overview of last commits on the current branch
 
-    git log --graph --oneline
+    git log --graph --oneline --decorate
 
 Detailed review history of commits
 
-    git log --all --graph
+    git log --all --graph --decorate
 
 The Git `log` command is actually quite versatile (see its man page).
 It allows for cool things like listing what I have done today
@@ -429,6 +429,10 @@ and switch to it
 
     git branch feature/update-customer
     git checkout feature/update-customer
+
+Can also be shortened to a one-liner
+
+    git checkout -b feature/update-customer
 
 **Push** the branch to `origin` and setup tracking
 

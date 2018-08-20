@@ -493,7 +493,7 @@ Un-stage a file (the changes to the file will remain, they will just not be comm
 Once you have staged all the changes you want to commit now,
 make the commit, passing in the commit message
 
-    git commit -m "Add update customer."
+    git commit -m "feat: Add update customer"
 
 You have created a new commit locally.
 Now you need to **push** the commit to the remote repo
@@ -511,13 +511,24 @@ either explicitly or implicitly by looking at messages of other commits.
 
 If you are not sure, consider using the following:
 
-- Write a whole sentence (first letter upper-case, end with a dot)
-  starting with a verb in infinitive.
+- Prefix the commit subject with a type.
+  This allows for fast scanning of the Git log.
+  Types may include (taken from 
+  [Udacity Git Commit Message Style Guide](http://udacity.github.io/git-styleguide/)):
+    - feat: a new feature
+    - fix: a bug fix
+    - docs: changes to documentation
+    - style: formatting, missing semi colons, etc; no code change
+    - refactor: refactoring production code
+    - test: adding tests, refactoring test; no production code change
+    - chore: updating build tasks, package manager configs, etc; no production code change
+- Write a whole sentence (first letter upper-case)
+  starting with a verb in infinitive and do not end with a period.
 - Use a verb describing the nature of the change,
   like _Add_, _Modify_, _Remove_, _Refactor_, etc.
 - Be specific.
-  Avoid general statements like "_Modify customer functionality._"
-  and use e.g. "_Add validate customer name length._" instead.
+  Avoid general statements like "_Modify customer functionality_"
+  and use e.g. "_Validate customer name length_" instead.
 - Do not go overboard.
   Remember the purpose of the commit message.
   It is not intended to detail every bit changed within the commit,
@@ -526,8 +537,17 @@ If you are not sure, consider using the following:
   If there is more to say, make an empty row
   and continue with paragraphs below it.
 - If the commit resolves an issue from an issue tracking system,
-  include its number at the beginning of the message,
+  include its number at the end of the message, after an empty separator line,
   usually preceded with a hash tag.
+
+Example commit message:
+
+    feat: Validate customer name length
+    
+    Detailed explanation of the change - optional. This is a paragraph
+    wrapped at 50 - 70 chars width.
+    
+    Resolves: #234
 
 ### 5.4 What and when to commit
 
@@ -643,7 +663,7 @@ Each one contains sections highlighting the conflicts like this
     Here go the lines from the develop branch...
     =======
     Here go the lines from your branch...
-    >>>>>>> Add update customer.
+    >>>>>>> Add update customer
     ...some following lines...
 
 Edit each such conflict section, remove the marker lines
@@ -690,7 +710,7 @@ Stage all changes you want to be part of the last commit.
 
 Create a new commit by **amending** the last one
 
-    git commit --amend -m "Amended commit message."
+    git commit --amend -m "Amended commit message"
 
 You can also use `git gui` and check the "_Amend last commit_" option.
 
@@ -771,9 +791,9 @@ but initiate the rebase in the interactive mode
 
 A _vi_ editor is opened and the commits in the feature branch are listed
 
-    pick cb3d8b0 Add update customer.
-    pick 4fbddf4 Add validate customer name in update customer.
-    pick 46dffb4 Add validate customer phone in update customer.
+    pick cb3d8b0 Add update customer
+    pick 4fbddf4 Add validate customer name in update customer
+    pick 46dffb4 Add validate customer phone in update customer
 
 Each line presents a commit (with a hash and commit message)
 preceded by a command.
@@ -788,9 +808,9 @@ which means _squash the commit to the previous one_.
 Let's say you want to squash the last two of the three commits above.
 You modify the last command from `pick` to `s` (= `squash`)
 
-    pick cb3d8b0 Add update customer.
-    pick 4fbddf4 Add validate customer name in update customer.
-    s 46dffb4 Add validate customer phone in update customer.
+    pick cb3d8b0 Add update customer
+    pick 4fbddf4 Add validate customer name in update customer
+    s 46dffb4 Add validate customer phone in update customer
 
 (Press <kbd>i</kbd> to start editing,
 delete `pick` and type <kbd>s</kbd> instead,
@@ -802,11 +822,11 @@ Now you have to prepare the commit message for the new squashed commit.
     # This is a combination of 2 commits.
     # The first commit's message is:
     
-    Add validate customer name in update customer.
+    Add validate customer name in update customer
     
     # This is the 2nd commit message:
     
-    Add validate customer phone in update customer.
+    Add validate customer phone in update customer
     
     # Please enter the commit message for your changes. ...
 
@@ -818,7 +838,7 @@ and type <kbd>Z</kbd><kbd>Z</kbd> to save changes.)
 
     # This is a combination of 2 commits.
     
-    Add validate customer in update.
+    Add validate customer in update
     
     # Please enter the commit message for your changes. ...
 
